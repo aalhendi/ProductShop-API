@@ -3,6 +3,7 @@ const express = require("express");
 let products = require("./products");
 const cors = require("cors");
 const slugify = require("slugify");
+const e = require("express");
 
 const app = express();
 
@@ -62,9 +63,24 @@ app.post("/products/", (req, res) => {
       ...req.body,
     };
     products.push(newProduct);
-    res.status(201).json(newProduct);
+    res.status(201).json(newProduct); // 201 - No Content
   } catch (error) {
     console.error(error);
+  }
+});
+
+// Update Product
+app.put("/products/:productId", (req, res) => {
+  const { productId } = req.params;
+  console.log(req.body);
+  const foundProduct = products.find((product) => product.id === +productId);
+  if (foundProduct) {
+    for (const key in req.body) {
+      foundProduct[key] = req.body[key];
+    }
+    res.status(204).end(); // 204 - Created
+  } else {
+    res.status(404).json({ message: "Product Not Found" });
   }
 });
 
