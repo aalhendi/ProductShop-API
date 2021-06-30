@@ -63,7 +63,7 @@ app.post("/products/", (req, res) => {
       ...req.body,
     };
     products.push(newProduct);
-    res.status(201).json(newProduct); // 201 - No Content
+    res.status(201).json(newProduct); // 201 - Created
   } catch (error) {
     console.error(error);
   }
@@ -76,9 +76,9 @@ app.put("/products/:productId", (req, res) => {
   if (foundProduct) {
     for (const key in req.body) {
       foundProduct[key] = req.body[key];
-      foundProduct.slug = slugify(foundProduct.name, { lower: true });
     }
-    res.status(204).end(); // 204 - Created
+    foundProduct.slug = slugify(foundProduct.name, { lower: true });
+    res.status(204).end(); // 204 - No Content
   } else {
     res.status(404).json({ message: "Product Not Found" });
   }
