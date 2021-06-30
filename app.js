@@ -72,11 +72,11 @@ app.post("/products/", (req, res) => {
 // Update Product
 app.put("/products/:productId", (req, res) => {
   const { productId } = req.params;
-  console.log(req.body);
   const foundProduct = products.find((product) => product.id === +productId);
   if (foundProduct) {
     for (const key in req.body) {
       foundProduct[key] = req.body[key];
+      foundProduct.slug = slugify(foundProduct.name, { lower: true });
     }
     res.status(204).end(); // 204 - Created
   } else {
