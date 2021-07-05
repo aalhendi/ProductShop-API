@@ -1,14 +1,18 @@
-let products = require("../../products");
-const slugify = require("slugify");
+const { Product } = require("../../db/models");
 
-exports.productFetch = (req, res) => {
-  res.json(products);
+exports.productFetch = async (req, res) => {
+  try {
+    const products = await Product.findAll();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-exports.productFind = (req, res) => {
+exports.productFind = async (req, res) => {
   const { productId } = req.params;
   try {
-    const foundProduct = products.find((product) => +productId === product.id);
+    const foundProduct = await Product.findByPk(productId);
     if (foundProduct) {
       res.json(foundProduct);
     } else {
@@ -21,47 +25,41 @@ exports.productFind = (req, res) => {
   }
 };
 
-exports.productDelete = (req, res) => {
+exports.productDelete = async (req, res) => {
   const { productId } = req.params;
   try {
-    const foundProduct = products.find((product) => +productId === product.id);
+    const foundProduct = await Product.findByPk(productId);
     if (foundProduct) {
-      products = products.filter((product) => +productId !== product.id);
+      await foundProduct.destroy();
       res.status(204).end();
     } else {
       res.status(404).json({ message: "Product Not Found" });
     }
   } catch (error) {
-    console.error(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
-exports.productCreate = (req, res) => {
+exports.productCreate = async (req, res) => {
   try {
-    const id = products.length + 1;
-    const slug = slugify(req.body.name, { lower: true });
-    const newProduct = {
-      id,
-      slug,
-      ...req.body,
-    };
-    products.push(newProduct);
+    const newProduct = await Product.create(req.body);
     res.status(201).json(newProduct); // 201 - Created
   } catch (error) {
-    console.error(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
-exports.productUpdate = (req, res) => {
+exports.productUpdate = async (req, res) => {
   const { productId } = req.params;
-  const foundProduct = products.find((product) => product.id === +productId);
-  if (foundProduct) {
-    for (const key in req.body) {
-      foundProduct[key] = req.body[key];
+  try {
+    const foundProduct = await Product.findByPk(productId);
+    if (foundProduct) {
+      await foundProduct.update(req.body);
+      res.status(204).end(); // 204 - No Content
+    } else {
+      res.status(404).json({ message: "Product Not Found" });
     }
-    foundProduct.slug = slugify(foundProduct.name, { lower: true });
-    res.status(204).end(); // 204 - No Content
-  } else {
-    res.status(404).json({ message: "Product Not Found" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
