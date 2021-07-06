@@ -12,7 +12,20 @@ app.use(express.json());
 
 const db = require("./db/models");
 
+//Routes
 app.use("/products", productRoutes);
+
+//Error Handling
+app.use((err, req, res, next) => {
+  res
+    .status(err.status || 500)
+    .json({ message: err.message || "Internal Server Errror." });
+});
+
+// Handle Incorrect Path
+app.use((req, res, next) => {
+  res.status(404).json({ message: "Path not found." });
+});
 
 const run = async () => {
   try {
