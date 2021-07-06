@@ -1,4 +1,5 @@
 const express = require("express");
+const multer = require("multer");
 const {
   productFetch,
   productFind,
@@ -22,6 +23,18 @@ router.param("productId", async (req, res, next, productId) => {
   }
 });
 
+// Multer
+const storage = multer.diskStorage({
+  destination: "./media",
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage: storage });
+// End Multer
+
+// Product
 // Products List
 router.get("/", productFetch);
 
@@ -32,9 +45,10 @@ router.get("/:productId", productFind);
 router.delete("/:productId", productDelete);
 
 // Create Product
-router.post("/", productCreate);
+router.post("/", upload.single("image"), productCreate);
 
 // Update Product
-router.put("/:productId", productUpdate);
+router.put("/:productId", upload.single("image"), productUpdate);
+// End Product
 
 module.exports = router;

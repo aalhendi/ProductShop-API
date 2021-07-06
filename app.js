@@ -14,6 +14,7 @@ const db = require("./db/models");
 
 //Routes
 app.use("/products", productRoutes);
+app.use("/media", express.static("media"));
 
 //Error Handling
 app.use((err, req, res, next) => {
