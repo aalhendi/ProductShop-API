@@ -43,6 +43,7 @@ const upload = multer({
     }
     cb(null, true);
   },
+  limits: { fileSize: 10485760 }, //No files larger than 10MB
 });
 // End Multer
 
