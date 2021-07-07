@@ -35,17 +35,7 @@ exports.productDelete = async (req, res, next) => {
   }
 };
 
-exports.productCreate = async (req, res, next) => {
-  try {
-    if (req.file) {
-      req.body.image = `http://${req.get("host")}/${req.file.path}`;
-    }
-    const newProduct = await Product.create(req.body);
-    res.status(201).json(newProduct); // 201 - Created
-  } catch (error) {
-    next(error);
-  }
-};
+//productCreate (moved to producer/controllers)
 
 exports.productUpdate = async (req, res, next) => {
   try {

@@ -2,6 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const productRoutes = require("./API/product/routes");
+const producerRoutes = require("./API/producer/routes");
 
 const app = express();
 
@@ -14,6 +15,7 @@ const db = require("./db/models");
 
 //Routes
 app.use("/products", productRoutes);
+app.use("/producers", producerRoutes);
 app.use("/media", express.static("media"));
 
 //Error Handling
@@ -30,7 +32,7 @@ app.use((req, res, next) => {
 
 const run = async () => {
   try {
-    await db.sequelize.sync();
+    await db.sequelize.sync({});
     console.log("Connection to the database successful");
     //Listen @ port 8000
     await app.listen(8000, () => {

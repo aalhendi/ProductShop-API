@@ -1,29 +1,13 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
-
 const {
-  productFetch,
-  productFind,
-  productDelete,
+  producerFetch,
+  producerCreate,
   productCreate,
-  productUpdate,
-  fetchProduct,
+  fetchProducer,
 } = require("./controllers");
 const router = express.Router();
-
-// Param middleware
-router.param("productId", async (req, res, next, productId) => {
-  const product = await fetchProduct(productId, next);
-  if (product) {
-    req.product = product;
-    next();
-  } else {
-    const error = new Error("Product Not Found.");
-    error.status = 404;
-    next(error);
-  }
-});
+const path = require("path");
 
 // Multer
 const storage = multer.diskStorage({
@@ -47,20 +31,26 @@ const upload = multer({
 });
 // End Multer
 
-// Product
-// Products List
-router.get("/", productFetch);
+// Params Middleware
+router.param("producerId", async (req, res, next, producerId) => {
+  const producer = await fetchProducer(producerId, next);
+  if (producer) {
+    req.producer = producer;
+    next();
+  } else {
+    const error = new Error("Producer Not Found.");
+    error.status = 404;
+    next(error);
+  }
+});
 
-// Find Product
-router.get("/:productId", productFind);
+// Producer List
+router.get("/", producerFetch);
 
-// Delete Product
-router.delete("/:productId", productDelete);
+// Create Producer
+router.post("/", upload.single("image"), producerCreate);
 
-// Create Product (in producer/routes)
-
-// Update Product
-router.put("/:productId", upload.single("image"), productUpdate);
-// End Product
+// Create Product
+router.post("/:producerId/products", upload.single("image"), productCreate);
 
 module.exports = router;
