@@ -1,5 +1,7 @@
 const express = require("express");
 const multer = require("multer");
+const path = require("path");
+
 const {
   productFetch,
   productFind,
@@ -31,7 +33,17 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  fileFilter: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    if (![".png", ".jpg", ".jpeg", ".bmp", ".jfif"].includes(ext)) {
+      console.log("Invalid filetype upload attempted");
+      return cb(null, false, new Error("Only .png files allowed"));
+    }
+    cb(null, true);
+  },
+});
 // End Multer
 
 // Product
