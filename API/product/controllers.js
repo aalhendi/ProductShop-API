@@ -43,7 +43,7 @@ exports.productUpdate = async (req, res, next) => {
       req.body.image = `http://${req.get("host")}/${req.file.path}`;
     }
     await req.product.update(req.body);
-    res.json(req.product); // 204 - No Content
+    res.json(req.product);
   } catch (error) {
     next(error);
   }
