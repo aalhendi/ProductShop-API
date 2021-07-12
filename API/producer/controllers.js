@@ -11,7 +11,12 @@ exports.fetchProducer = async (producerId, next) => {
 
 exports.producerFetch = async (req, res, next) => {
   try {
-    const producers = await Producer.findAll();
+    const producers = await Producer.findAll({
+      include: {
+        model: Product,
+        as: "products",
+      },
+    });
     res.json(producers);
   } catch (error) {
     next(error);
