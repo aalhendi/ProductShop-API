@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 
 const run = async () => {
   try {
-    await db.sequelize.sync({ force: true });
+    await db.sequelize.sync({ alter: true });
     console.log("Connection to the database successful");
     //Listen @ port 8000
     await app.listen(8000, () => {

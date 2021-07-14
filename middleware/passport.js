@@ -16,6 +16,6 @@ exports.localStrategy = new LocalStrategy(async (username, password, done) => {
     }
     return done(null, false);
   } catch (error) {
-    done(error);
+    return done(error);
   }
 });

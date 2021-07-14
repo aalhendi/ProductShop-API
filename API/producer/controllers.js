@@ -15,6 +15,7 @@ exports.producerFetch = async (req, res, next) => {
       include: {
         model: Product,
         as: "products",
+        attributes: ["id"],
       },
     });
     res.json(producers);
@@ -32,7 +33,19 @@ exports.producerFind = async (req, res, next) => {
 };
 
 exports.producerCreate = async (req, res, next) => {
+  console.log(req);
   try {
+    console.log(req.user);
+    /* Check if user already has a producer */
+    const foundProducer = await Producer.findOne({
+      where: { userId: req.user.id },
+    });
+    if (foundProducer) {
+      /* Prevent user from creating two producers */
+      const error = new Error("User already has a Producer.");
+      error.status = 400;
+      return next(error);
+    }
     if (req.file) {
       req.body.image = `http://${req.get("host")}/${req.file.path}`;
     }
@@ -45,6 +58,12 @@ exports.producerCreate = async (req, res, next) => {
 
 exports.productCreate = async (req, res, next) => {
   try {
+    /* The user adding the product must be the producer */
+    if (req.user.id !== req.producer.userId) {
+      const error = new Error("Unauthorized.");
+      error.status = 400;
+      return next(error);
+    }
     if (req.file) {
       req.body.image = `http://${req.get("host")}/${req.file.path}`;
     }

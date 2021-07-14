@@ -57,4 +57,15 @@ db.Product.belongsTo(db.Producer, {
   foreignKey: "producerId",
 });
 
+db.User.hasOne(db.Producer, {
+  /* Attributes */
+  as: "producer",
+  foreignKey: "producerId",
+});
+
+db.Producer.belongsTo(db.User, {
+  /*Attributes */
+  as: "user",
+});
+
 module.exports = db;
