@@ -1,5 +1,7 @@
 const express = require("express");
 const multer = require("multer");
+const passport = require("passport");
+
 const {
   producerFetch,
   producerCreate,
@@ -48,7 +50,12 @@ router.param("producerId", async (req, res, next, producerId) => {
 router.get("/", producerFetch);
 
 // Create Producer
-router.post("/", upload.single("image"), producerCreate);
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  producerCreate
+);
 
 // Create Product
 router.post("/:producerId/products", upload.single("image"), productCreate);

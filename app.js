@@ -2,7 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const passport = require("passport");
-const { localStrategy } = require("./middleware/passport");
+const { localStrategy, jwtStrategy } = require("./middleware/passport");
 const productRoutes = require("./API/product/routes");
 const producerRoutes = require("./API/producer/routes");
 const userRoutes = require("./API/user/routes");
@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());
 passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 const db = require("./db/models");
 

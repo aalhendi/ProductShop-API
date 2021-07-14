@@ -33,9 +33,7 @@ exports.producerFind = async (req, res, next) => {
 };
 
 exports.producerCreate = async (req, res, next) => {
-  console.log(req);
   try {
-    console.log(req.user);
     /* Check if user already has a producer */
     const foundProducer = await Producer.findOne({
       where: { userId: req.user.id },
