@@ -47,6 +47,7 @@ exports.producerCreate = async (req, res, next) => {
     if (req.file) {
       req.body.image = `http://${req.get("host")}/${req.file.path}`;
     }
+    req.body.userId = req.user.id;
     const newProducer = await Producer.create(req.body);
     res.status(201).json(newProducer); // 201 - Created
   } catch (error) {
