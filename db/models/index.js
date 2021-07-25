@@ -60,7 +60,7 @@ db.Product.belongsTo(db.Producer, {
 db.User.hasOne(db.Producer, {
   /* Attributes */
   as: "producer",
-  foreignKey: "producerId",
+  foreignKey: "userId",
 });
 
 db.Producer.belongsTo(db.User, {

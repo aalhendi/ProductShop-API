@@ -1,3 +1,4 @@
+const normalize = require("normalize-path"); // Normalize Unix and Windows paths
 const { Producer, Product } = require("../../db/models");
 
 exports.fetchProducer = async (producerId, next) => {
@@ -45,7 +46,7 @@ exports.producerCreate = async (req, res, next) => {
       return next(error);
     }
     if (req.file) {
-      req.body.image = `http://${req.get("host")}/${req.file.path}`;
+      req.body.image = `http://${req.get("host")}/${normalize(req.file.path)}`;
     }
     req.body.userId = req.user.id;
     const newProducer = await Producer.create(req.body);
@@ -64,7 +65,7 @@ exports.productCreate = async (req, res, next) => {
       return next(error);
     }
     if (req.file) {
-      req.body.image = `http://${req.get("host")}/${req.file.path}`;
+      req.body.image = `http://${req.get("host")}/${normalize(req.file.path)}`;
     }
     req.body.producerId = req.producer.id;
     const newProduct = await Product.create(req.body);

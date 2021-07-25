@@ -58,6 +58,11 @@ router.post(
 );
 
 // Create Product
-router.post("/:producerId/products", upload.single("image"), productCreate);
+router.post(
+  "/:producerId/products",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  productCreate
+);
 
 module.exports = router;

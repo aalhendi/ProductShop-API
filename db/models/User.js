@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: false,
       validate: {
         notEmpty: {
           args: true,
@@ -25,7 +25,6 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
     },
-    // FIXME: EMAIL VALIDATION
     email: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -47,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: false,
       validate: {
         notEmpty: {
           args: true,
@@ -58,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: false,
       validate: {
         notEmpty: {
           args: true,

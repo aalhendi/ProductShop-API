@@ -1,3 +1,5 @@
+// NOTE: Could use path.normalize() from node but nomalize seems to be more robust
+const normalize = require("normalize-path"); // Normalize Unix and Windows paths
 const { Product } = require("../../db/models");
 
 exports.fetchProduct = async (productId, next) => {
@@ -40,7 +42,7 @@ exports.productDelete = async (req, res, next) => {
 exports.productUpdate = async (req, res, next) => {
   try {
     if (req.file) {
-      req.body.image = `http://${req.get("host")}/${req.file.path}`;
+      req.body.image = `http://${req.get("host")}/${normalize(req.file.path)}`;
     }
     await req.product.update(req.body);
     res.json(req.product);
