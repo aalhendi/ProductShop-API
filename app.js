@@ -6,6 +6,7 @@ const { localStrategy, jwtStrategy } = require("./middleware/passport");
 const productRoutes = require("./API/product/routes");
 const producerRoutes = require("./API/producer/routes");
 const userRoutes = require("./API/user/routes");
+const orderRoutes = require("./API/order/routes");
 
 const app = express();
 
@@ -23,6 +24,7 @@ const db = require("./db/models");
 app.use("/products", productRoutes);
 app.use("/producers", producerRoutes);
 app.use("/", userRoutes);
+app.use("/", orderRoutes);
 app.use("/media", express.static("media"));
 
 //Error Handling
