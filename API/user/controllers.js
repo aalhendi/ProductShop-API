@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../../db/models");
 const { JWT_SECRET, JWT_EXPIRATION_MS } = require("../../config/keys");
 
-exports.signup = async (req, res, next) => {
+exports.register = async (req, res, next) => {
   const { password } = req.body;
   const saltRounds = 10;
   try {
@@ -23,7 +23,6 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
-  console.log(`Attempting login for ${req.user.username}`);
   const { user } = req;
   const payload = {
     id: user.id,
